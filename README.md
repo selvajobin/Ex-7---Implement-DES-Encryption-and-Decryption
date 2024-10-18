@@ -9,49 +9,53 @@
   2. AES does not use a Feistel network like DES, it uses variant of Rijndael. 
   3. It has a fixed block size of 128 bits, and a key size of 128, 192, or 256 bits. 
   4. AES operates on a 4 × 4 column-major order array of bytes, termed the state
+name:selva jobin
 
+reg:212223220102
 ## PROGRAM: 
-```
-
-#include <stdio.h>
+```#include <stdio.h>
 #include <string.h>
-
-
-  void xor_encrypt_decrypt(char *input, char *key) {
-int input_len = strlen(input);
-int key_len = strlen(key);
-
-for (int i = 0; i < input_len; i++) {
-    input[i] = input[i] ^ key[i % key_len];
+#include <stdint.h>
+uint64_t stringToBinary(const char *str) {
+uint64_t binary = 0;
+for (int i = 0; i < 8 && str[i] != '\0'; ++i) {
+binary <<= 8;
+binary |= (uint64_t)str[i];
 }
+return binary;
 }
-
+uint32_t XOR(uint32_t a, uint32_t b) {
+return a ^ b;
+}
+uint64_t encryptDES(uint64_t plainText) {
+uint32_t leŌ = (plainText >> 32) & 0xFFFFFFFF;
+uint32_t right = plainText & 0xFFFFFFFF;
+uint32_t xorResult = XOR(leŌ, right);
+uint64_t cipherText = 0;
+cipherText = ((uint64_t)right << 32) | xorResult;
+return cipherText;
+}
 int main() {
-    
-    printf("Gokularamanan k\n");
-    printf("\n\n\n\n      ***** ADVANCED-ENCRYPTION-STANDARD-DES-ALGORITHM *****\n\n\n");
-    
-char url[] = "GOKULARAMANAN";
-char key[] = "secretkey"; 
-
-printf("Original text: %s\n", url);
-
-xor_encrypt_decrypt(url, key);
-printf("Encrypted text: %s\n", url);
-
-xor_encrypt_decrypt(url, key);
-printf("Decrypted text: %s\n", url);
-
+char plainText[9];
+printf("\n **DES ALGORITHM ENCRYPTION***\n\n");
+printf("\n Enter an 8-character plaintext(DES): ");
+fgets(plainText, sizeof(plainText), stdin);
+plainText[strcspn(plainText, "\n")] = 0;
+uint64_t binaryPlainText = stringToBinary(plainText);
+uint64_t cipherText = encryptDES(binaryPlainText);
+printf(" \n Encrypted Cipher Text in hex(DES): %016llX\n",cipherText);
 return 0;
 }
 
 
 
+
 ```
-## OUTPUT:
+OUTPUT:
 
-![image](https://github.com/user-attachments/assets/3e36559a-2aac-4aec-86d4-f47a0d1039a5)
 
+
+![Screenshot 2024-10-18 085412](https://github.com/user-attachments/assets/8cc7f140-3c67-450a-aae3-61a099c47948)
 
 
 
